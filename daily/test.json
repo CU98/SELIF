@@ -1,0 +1,6 @@
+{
+  "用户姓名（必须用Unicode编码）": {
+    "cookie": "抓包抓到的cookie",
+    "address": "定位地址（必须用Unicode编码）"
+  }
+}
