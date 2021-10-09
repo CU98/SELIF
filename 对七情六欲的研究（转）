@@ -1,0 +1,242 @@
+#include <string>
+#include <iostream>
+#include "源1.h"
+#include <math.h>
+#include <time.h>
+#include <Windows.h>
+ 
+namespace value{
+     
+    int MidPro[] = { 2,3,4,5,6,7,8,9 };//概率值
+}
+using namespace value;//使用value命名空间中的值Mid
+using namespace std;
+class behavior
+{
+public:
+    behavior();
+    ~behavior();
+    int selfHarm();//自残
+    int takeThingsTooHard();//想不开
+private:
+ 
+};
+ 
+behavior::behavior()
+{
+}
+ 
+behavior::~behavior()
+{
+}
+ 
+int behavior::selfHarm() {
+    cout << "自残" << endl;
+    return EXIT_SUCCESS;
+}
+int behavior::takeThingsTooHard(){
+    cout << "想不开" << endl;
+    return EXIT_SUCCESS;
+}
+ 
+class emotions
+{
+public:
+    emotions();
+    ~emotions();
+    bool getIsAnger() {
+        return this->isAnger;//获取是否愤怒
+    }
+    bool GetIsAffection() {
+        return this->isAffection;//获取是否爱恋
+    }
+    int GetAffectionValue() {
+        return this->Affectionvalue;//获取爱恋值
+    }
+    int GetAngerValue() {
+        return this->Angervalue;//获取愤怒值
+    }
+    bool SetIsAnger(bool isAnger) {
+         this->isAnger=isAnger;//设置是否愤怒
+         return EXIT_SUCCESS;
+    }
+    bool SetIsAffection(bool isAffection) {
+        this->isAffection=isAffection;//设置是否爱恋
+        return EXIT_SUCCESS;
+    }
+    int SetAffectionValue(int Affectionvalue) {
+        this->Affectionvalue=Affectionvalue;//设置爱恋值
+        return EXIT_SUCCESS;
+    }
+    int SetAngerValue(int Angervalue) {
+        this->Angervalue=Angervalue;//设置愤怒值
+        return EXIT_SUCCESS;
+    }
+ 
+private:
+    bool isAnger;//是否愤怒
+    bool isAffection;//是否爱上
+    int Affectionvalue;//爱恋值
+    int Angervalue;//愤怒值
+};
+ 
+emotions::emotions()
+{
+}
+ 
+emotions::~emotions()
+{
+}
+ class MyLove
+{
+public:
+    MyLove();
+    ~MyLove();
+    int showLove(MyLove &love);
+    int SetName(string name) {
+        this->name = name;//设置爱人的名字
+        return EXIT_SUCCESS;
+    }
+    string GetName() {
+ 
+        return this->name;//获取爱人的名字
+    }
+    int SetisBeauty(bool isBeauty) {
+        this->isBeauty = isBeauty;//设置爱人是否漂亮
+        return EXIT_SUCCESS;
+    }
+    bool GetisBeauty() {
+ 
+        return this->isBeauty;////获取爱人是否漂亮
+    }
+    emotions GetEmotions() {
+        return this->emot;
+    }
+    void SetEmotions(emotions emot) {
+         this->emot= emot;
+    }
+private:
+    string name;//爱人名字
+    bool isBeauty;//爱人是否漂亮
+    emotions emot;//情感信息
+};
+ 
+MyLove::MyLove()
+{
+}
+ 
+MyLove::~MyLove()
+{
+}
+int getIsLoveBadProbability() {
+    Sleep(520);
+    srand((unsigned int)time(NULL));
+    int probaility=rand() % 10;
+    //cout << "概率值：" << probaility << endl;
+    return probaility;
+}
+int setLoveisbad(MyLove &emot, int &Affectionvalue) {
+    int Mid;
+    //根据爱恋值设置概率
+    if (Affectionvalue > 5 && Affectionvalue < 6)
+         Mid = MidPro[2];
+    if(Affectionvalue > 6 && Affectionvalue < 8)
+        Mid = MidPro[3];
+    if (Affectionvalue > 8 && Affectionvalue < 9)
+        Mid = MidPro[4];
+    if(Affectionvalue > 9)
+        Mid = MidPro[5];
+ 
+    int isLovePro=getIsLoveBadProbability();//爱恋值设置概率
+    if (isLovePro > Mid) {
+        emotions emots = emot.GetEmotions();
+        emots.SetIsAnger(true);//设置是否愤怒
+        int AngerValue= emots.GetAngerValue();
+        int Anger=AngerValue + (100 - isLovePro);
+        emots.SetAngerValue(Anger);//设置愤怒值
+        emot.SetEmotions(emots);
+    }
+    else
+    {
+        return EXIT_SUCCESS;
+    }
+    return EXIT_SUCCESS;
+}
+int MyLove::showLove(MyLove &love) {
+    emotions emo=love.GetEmotions();
+    if (emo.GetAngerValue()>100) {
+        emo.SetAngerValue(0);
+        love.SetEmotions(emo);
+    }
+    behavior behav;
+    int  AffectionValue = love.GetEmotions().GetAffectionValue();//获取爱恋值
+    bool IsAffection= love.GetEmotions().GetIsAffection();//获取是否爱恋
+    if (!IsAffection)//不爱就直接返回
+        return 0;
+    if (AffectionValue > 50) {//爱恋值是否大于50
+        setLoveisbad(love,AffectionValue);//概率设置爱情是否变坏
+        if (love.GetEmotions().GetAngerValue() > MidPro[3]) {//判断愤怒值是否大于50
+            if (getIsLoveBadProbability() > MidPro[3]) {
+                //cout << MidPro[3];
+         
+                if (getIsLoveBadProbability() >MidPro[3]) {
+                    cout << "愤怒值：" << love.GetEmotions().GetAngerValue() << endl;
+                    behav.selfHarm();// "自残"
+                }
+                else if(getIsLoveBadProbability() < MidPro[3])
+                {
+                    cout << "愤怒值：" << love.GetEmotions().GetAngerValue()<<endl;
+                    behav.takeThingsTooHard();// "想不开"
+                }
+            }
+            else
+            {
+                return EXIT_SUCCESS;
+            }
+                 
+        }
+        else
+        {
+            return EXIT_SUCCESS;
+        }
+    }
+    else
+    {
+        return EXIT_SUCCESS;
+ 
+    }
+    return EXIT_SUCCESS;
+}
+void test() {
+ 
+    MyLove love;
+    love.SetName("test1");
+    love.SetisBeauty(false);
+    string name = love.GetName();
+    cout << name << endl;
+    bool isBeauty = love.GetisBeauty();
+    if (isBeauty)
+        cout << "Beauty" << endl;
+    cout << "test" << endl;
+}
+void test1() {
+    MyLove mylove;
+    mylove.SetisBeauty(true);
+    mylove.SetName("MyloveTest");
+    emotions em= mylove.GetEmotions();
+    em.SetAffectionValue(100);
+    em.SetAngerValue(10);
+    em.SetIsAffection(true);
+    em.SetIsAnger(false);
+    mylove.SetEmotions(em);
+    while (true)
+    {
+        mylove.showLove(mylove);
+ 
+    }
+}
+int main() {
+    //test();
+    test1();
+ 
+}
